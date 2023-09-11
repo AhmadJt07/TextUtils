@@ -1,24 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import Navbar from "./Components/Navbar";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./Components/Home";
+import About from "./Components/About";
+import Contact from "./Components/Contact";
+import Services from "./Components/Services";
+import { useState } from "react";
+import Alert from "./Components/Alert";
 
 function App() {
+  const [mode, setMode] = useState("light");
+  const [alert, setAlert] = useState(null);
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+
+  const toggleMode = () => {
+    if (mode === "light") {
+      setMode("dark");
+      showAlert("Dark Mode has been enabled", "success");
+      // document.body.style.backgroundColor = "gray";
+    } else {
+      setMode("light");
+      showAlert("light Mode has been enabled", "success");
+      // document.body.style.backgroundColor = "white";
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Navbar
+          Title="TextUtils"
+          aboutText="About Us"
+          mode={mode}
+          toggleMode={toggleMode}
+        />
+        <Alert alert={alert} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                TitleForm="Enter the Text to Analyze Below"
+                showAlert={showAlert}
+                // mode={mode}
+              />
+            }
+          />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services" element={<Services />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
