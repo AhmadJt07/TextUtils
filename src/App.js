@@ -43,6 +43,7 @@ function App() {
         <Alert alert={alert} />
         <Routes>
           <Route
+            exact
             path="/"
             element={
               <Home
